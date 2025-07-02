@@ -26,7 +26,7 @@ public:
    * storing odom from CSM.
    */
   struct csm_odom {
-    ros::Time timestamp;
+    rclcpp::Time timestamp;
     float x;
     float y;
     float theta;
@@ -40,8 +40,8 @@ public:
    * for storing CSM results each interval.
    */
   struct csm_results {
-    ros::Time start_t;
-    ros::Time end_t;
+    rclcpp::Time start_t;
+    rclcpp::Time end_t;
     double T;
     double scan_match_results[3];
   };

@@ -144,7 +144,7 @@ void cScanMatch::match(const std::vector<messageIO::laserScanData> &scan,
     last_odom.error = results.error;
 
     csm_results last_result;
-    last_result.T = scan[i].timestamp.toSec() - scan[i-1].timestamp.toSec();
+    last_result.T = scan[i].timestamp.nanoseconds() - scan[i-1].timestamp.nanoseconds();
     last_result.start_t = scan[i-1].timestamp;
     last_result.end_t = scan[i].timestamp;
     last_result.scan_match_results[0] = results.x[0];

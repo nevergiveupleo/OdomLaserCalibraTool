@@ -9,10 +9,10 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
                                         std::vector<cSynchronizer::sync_data> &sync_results) {
 
   int odom_it = 0;
-  ros::Time start_t_1;
-  ros::Time start_t_2;
-  ros::Time end_t_1;
-  ros::Time end_t_2;
+  rclcpp::Time start_t_1;
+  rclcpp::Time start_t_2;
+  rclcpp::Time end_t_1;
+  rclcpp::Time end_t_2;
   double start_v_1_l;
   double start_v_1_r;
   double start_v_2_l;
@@ -29,8 +29,8 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
     // Find nearly timestamp for odometer.
     for (int j = odom_it; j < odom_data.size(); j++)
     {
-      if ((odom_data[j].timestamp.toSec() < csm_results[i].start_t.toSec()) &&
-          (odom_data[j+1].timestamp.toSec() > csm_results[i].start_t.toSec()))
+      if ((odom_data[j].timestamp.nanoseconds() < csm_results[i].start_t.nanoseconds()) &&
+          (odom_data[j+1].timestamp.nanoseconds() > csm_results[i].start_t.nanoseconds()))
       {
         start_t_1 = odom_data[j].timestamp;
         start_t_2 = odom_data[j+1].timestamp;
@@ -41,7 +41,7 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
         odom_it = j;
         continue;
       }
-      if (odom_data[j].timestamp.toSec() == csm_results[i].start_t.toSec())
+      if (odom_data[j].timestamp.nanoseconds() == csm_results[i].start_t.nanoseconds())
       {
         start_t_1 = odom_data[j].timestamp;
         start_t_2 = odom_data[j].timestamp;
@@ -52,8 +52,8 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
         odom_it = j;
         continue;
       }
-      if ((odom_data[j].timestamp.toSec() < csm_results[i].end_t.toSec()) &&
-          (odom_data[j+1].timestamp.toSec() > csm_results[i].end_t.toSec()))
+      if ((odom_data[j].timestamp.nanoseconds() < csm_results[i].end_t.nanoseconds()) &&
+          (odom_data[j+1].timestamp.nanoseconds() > csm_results[i].end_t.nanoseconds()))
       {
         end_t_1 = odom_data[j].timestamp;
         end_t_2 = odom_data[j+1].timestamp;
@@ -64,7 +64,7 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
         odom_it = j;
         continue;
       }
-      if (odom_data[j].timestamp.toSec() == csm_results[i].end_t.toSec())
+      if (odom_data[j].timestamp.nanoseconds() == csm_results[i].end_t.nanoseconds())
       {
         end_t_1 = odom_data[j].timestamp;
         end_t_2 = odom_data[j].timestamp;
@@ -77,14 +77,14 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
       }
     }
 
-    float alpha = (csm_results[i].start_t.toSec() - start_t_1.toSec()) /
-        (start_t_2.toSec() - start_t_1.toSec());
+    float alpha = (csm_results[i].start_t.nanoseconds() - start_t_1.nanoseconds()) /
+        (start_t_2.nanoseconds() - start_t_1.nanoseconds());
 
     double velocity_start_l = alpha * start_v_1_l + (1 - alpha) * start_v_2_l;
     double velocity_start_r = alpha * start_v_1_r + (1 - alpha) * start_v_2_r;
 
-    float beta = (csm_results[i].end_t.toSec() - end_t_1.toSec()) /
-        (end_t_2.toSec() - end_t_1.toSec());
+    float beta = (csm_results[i].end_t.nanoseconds() - end_t_1.nanoseconds()) /
+        (end_t_2.nanoseconds() - end_t_1.nanoseconds());
 
     double velocity_end_l = beta * end_v_1_l + (1 - beta) * end_v_2_l;
     double velocity_end_r = beta * end_v_1_r + (1 - beta) * end_v_2_r;
