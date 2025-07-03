@@ -66,11 +66,18 @@ void messageIO::readDataFromBag(const std::string &bag_name, const std::string &
 
       odometerData tmp;
       tmp.timestamp = odom_msg.header.stamp;
-      tmp.x = odom_msg.pose.pose.position.x;
-      tmp.y = odom_msg.pose.pose.position.y;
-      tmp.theta = tf2::getYaw(odom_msg.pose.pose.orientation);
-      tmp.linear_velocity << odom_msg.twist.twist.linear.x, odom_msg.twist.twist.linear.y, odom_msg.twist.twist.linear.z;
-      tmp.angular_velocity << odom_msg.twist.twist.angular.x, odom_msg.twist.twist.angular.y, odom_msg.twist.twist.angular.z;
+      // tmp.x = odom_msg.pose.pose.position.x;
+      // tmp.y = odom_msg.pose.pose.position.y;
+      // tmp.theta = tf2::getYaw(odom_msg.pose.pose.orientation);
+      // tmp.linear_velocity << odom_msg.twist.twist.linear.x, odom_msg.twist.twist.linear.y, odom_msg.twist.twist.linear.z;
+      // tmp.angular_velocity << odom_msg.twist.twist.angular.x, odom_msg.twist.twist.angular.y, odom_msg.twist.twist.angular.z;
+      double r_l = 0.4;
+      double r_r = 0.4;
+      double b = 0.7;
+      double v = odom_msg.twist.twist.linear.x;
+      double omega = odom_msg.twist.twist.angular.z;
+      tmp.v_l = (v / r_l) - ((omega * b) / (2 * r_l));
+      tmp.v_r = (v / r_r) + ((omega * b) / (2 * r_r));
       odom_data.push_back(tmp);
     } else {
       RCLCPP_WARN(node_->get_logger(), "Unknown topic: %s", topic.c_str());
