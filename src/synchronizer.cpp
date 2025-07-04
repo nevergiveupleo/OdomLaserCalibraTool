@@ -77,15 +77,21 @@ void cSynchronizer::synchronizeLaserOdom(const std::vector<messageIO::odometerDa
       }
     }
 
-    float alpha = (csm_results[i].start_t.nanoseconds() - start_t_1.nanoseconds()) /
-        (start_t_2.nanoseconds() - start_t_1.nanoseconds());
-
+    double total_dt_start = (start_t_2.nanoseconds() - start_t_1.nanoseconds()) * 1e-9;
+    double dt_start = (csm_results[i].start_t.nanoseconds() - start_t_1.nanoseconds()) * 1e-9;
+    float alpha = 0.0f;
+    if (total_dt_start != 0.0) {
+        alpha = static_cast<float>(dt_start / total_dt_start);
+    }
     double velocity_start_l = alpha * start_v_1_l + (1 - alpha) * start_v_2_l;
     double velocity_start_r = alpha * start_v_1_r + (1 - alpha) * start_v_2_r;
 
-    float beta = (csm_results[i].end_t.nanoseconds() - end_t_1.nanoseconds()) /
-        (end_t_2.nanoseconds() - end_t_1.nanoseconds());
-
+    double total_dt_end   = (  end_t_2.nanoseconds() -   end_t_1.nanoseconds()) * 1e-9;
+    double dt_end   = (  csm_results[i].end_t.nanoseconds()   -   end_t_1.nanoseconds()) * 1e-9;
+    float beta = 0.0f;
+    if (total_dt_end != 0.0) {
+        beta = static_cast<float>(dt_end / total_dt_end);
+    }
     double velocity_end_l = beta * end_v_1_l + (1 - beta) * end_v_2_l;
     double velocity_end_r = beta * end_v_1_r + (1 - beta) * end_v_2_r;
 
