@@ -96,9 +96,9 @@ void cScanMatch::match(const std::vector<messageIO::laserScanData> &scan,
   int scan_odom_it = 0;
 
   csm_odom first_odom;
-  first_odom.x = -5.4056;
-  first_odom.y = 13.6702;
-  first_odom.theta = 3.10468;
+  first_odom.x = 0;
+  first_odom.y = 0;
+  first_odom.theta = 0;
   first_odom.nvalid = scan[0].ranges.size();
   first_odom.iterations = 0;
   first_odom.error = 0;
