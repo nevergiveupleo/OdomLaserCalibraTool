@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
   RCLCPP_INFO(node->get_logger(), "%s", colouredString("Sync results saved!", GREEN, REGULAR).c_str());
 
-  cSolve.calib(sync_results, 4);
+  cSolve.calib(sync_results, 10);
 
   rclcpp::spin(node);
   rclcpp::shutdown();
